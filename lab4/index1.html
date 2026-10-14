@@ -1,1 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Store — Order Confirmation</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      background: #f4f6fa;
+      color: #1b1f24;
+      margin: 0;
+      padding: 40px 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .card {
+      background: #fff;
+      max-width: 640px;
+      width: 100%;
+      padding: 32px 36px;
+      border-radius: 12px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    }
+    h1 { margin-top: 0; font-size: 1.6rem; }
+    .greeting { font-size: 1.15rem; font-weight: 600; color: #0b5fff; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid #e6e9ef;
+    }
+    th { width: 45%; color: #5a6472; font-weight: 600; }
+    .arrival {
+      margin-top: 24px;
+      padding: 14px 16px;
+      background: #eef4ff;
+      border-left: 4px solid #0b5fff;
+      border-radius: 6px;
+    }
+    .badge {
+      display: inline-block;
+      background: #e6f7ec;
+      color: #1a7f3c;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Order Confirmation <span id="statusBadge" class="badge"></span></h1>
+    <p id="greeting" class="greeting"></p>
+    <p id="thankYou"></p>
 
+    <table>
+      <tr><th>Customer Name</th><td id="outName"></td></tr>
+      <tr><th>Item Requested</th><td id="outItem"></td></tr>
+      <tr><th>Quantity Ordered</th><td id="outQty"></td></tr>
+      <tr><th>Order Placed</th><td id="outPlaced"></td></tr>
+    </table>
+
+    <div class="arrival">
+      <strong>Expected Arrival:</strong> <span id="outArrival"></span>
+    </div>
+  </main>
+
+  <script>
+    /* ---------- 1. Welcome alert ---------- */
+    alert("Welcome to My Store! We're glad you're here.");
+
+    /* ---------- 2. Prompts for the three pieces of data ---------- */
+    var customerName = "";
+    while (customerName.trim() === "") {
+      customerName = prompt("What is your name?") || "";
+      if (customerName === null) customerName = "";
+    }
+
+    var itemRequested = "";
+    while (itemRequested.trim() === "") {
+      itemRequested = prompt("What item would you like to order?") || "";
+    }
+
+    /* Loop until the quantity is a whole number between 1 and 99 */
+    var quantity = NaN;
+    while (isNaN(quantity) || quantity < 1 || quantity > 99 || quantity % 1 !== 0) {
+      var raw = prompt("How many would you like? (enter a number from 1 to 99)");
+      quantity = Number(raw);
+      if (raw === null) break; // customer cancelled
+    }
+    if (isNaN(quantity)) quantity = 1; // fallback if they cancelled out
+
+    /* ---------- 3. Time-appropriate greeting ---------- */
+    var now = new Date();
+    var hour = now.getHours();
+    var timeGreeting;
+
+    if (hour < 12) {
+      timeGreeting = "Good Morning";
+    } else if (hour < 18) {
+      timeGreeting = "Good Afternoon";
+    } else {
+      timeGreeting = "Good Evening";
+    }
+
+    document.getElementById("greeting").textContent =
+      timeGreeting + " " + customerName + "!";
+    document.getElementById("thankYou").textContent =
+      "Thank you for ordering! Here is a summary of your order:";
+
+    /* ---------- 4. Present the data on the page ---------- */
+    document.getElementById("outName").textContent = customerName;
+    document.getElementById("outItem").textContent = itemRequested;
+    document.getElementById("outQty").textContent = quantity;
+
+    var dateOptions = { year: "numeric", month: "long", day: "numeric" };
+    document.getElementById("outPlaced").textContent =
+      now.toLocaleDateString(undefined, dateOptions);
+
+    /* ---------- 5. Expected arrival — 7 days later ---------- */
+    var arrival = new Date(now.getTime());
+    arrival.setDate(arrival.getDate() + 7);
+
+    document.getElementById("outArrival").textContent =
+      arrival.toLocaleDateString(undefined, dateOptions);
+
+  
+    document.getElementById("statusBadge").textContent = "Confirmed";
+  </script>
+</body>
+</html>

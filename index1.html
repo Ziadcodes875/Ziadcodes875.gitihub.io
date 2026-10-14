@@ -121,14 +121,14 @@
     document.getElementById("outPlaced").textContent =
       now.toLocaleDateString(undefined, dateOptions);
 
-    /* ---------- 5. Expected arrival — exactly 7 days later ---------- */
+    /* ---------- 5. Expected arrival — 7 days later ---------- */
     var arrival = new Date(now.getTime());
     arrival.setDate(arrival.getDate() + 7);
 
     document.getElementById("outArrival").textContent =
       arrival.toLocaleDateString(undefined, dateOptions);
 
-    /* Optional small badge so the page reflects order state */
+  
     document.getElementById("statusBadge").textContent = "Confirmed";
   </script>
 </body>
